@@ -1,3 +1,5 @@
+mod termios_bits;
+
 use std::io::{self, Read};
 
 fn main() -> io::Result<()> {
