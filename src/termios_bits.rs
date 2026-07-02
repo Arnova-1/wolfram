@@ -8,6 +8,7 @@ pub const ECHO: TcFlag = 0o0000010;
 
 // Declare termios struct
 #[repr(C)]
+#[derive(Default)]
 pub struct Termios {
     c_iflag: TcFlag, // Input mode flags
     c_oflag: TcFlag, // Output mode flags
