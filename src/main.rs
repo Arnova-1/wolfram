@@ -1,29 +1,22 @@
 mod termios;
-mod raw_mode;
+mod terminal;
 
-use std::io::{self, Read, Result, Write};
-use std::str::from_utf8;
+use std::io::Result;
 
-use raw_mode::RawMode;
+use crate::terminal::{ raw_mode, keypress };
+use crate::terminal::types::Event;
 
 fn main() -> Result<()> {
-    let _raw = RawMode::enable()?;
+    let _raw = raw_mode::RawMode::enable()?;
 
     loop {
-        let mut buffer = [0u8; 1];
+        let ret = keypress::process()?;
 
-        io::stdin().read(&mut buffer)?;
-
-        if buffer == [b'q'] { break };
-
-        if buffer[0].is_ascii_control() {
-            print!("{}", buffer[0]);
-            io::stdout().flush().unwrap();
-        } else {
-            print!("{}", from_utf8(&buffer).unwrap());
-            io::stdout().flush().unwrap();
+        match ret {
+            Event::Quit => break,
+            Event::Continue => continue
         }
-    };
+    }
 
     Ok(())
 }
