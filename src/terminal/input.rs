@@ -1,9 +1,10 @@
-use std::io::{self, Read, Result};
+use std::io::{Read, Result, stdin};
 
-pub fn read_key() -> Result<u8> {
-    let mut c = [0u8; 1];
+pub fn read_key() -> Result<Option<u8>> {
+    let mut byte = [0u8; 1];
 
-    io::stdin().read(&mut c)?;
-
-    Ok(c[0])
+    match stdin().read(&mut byte)? {
+        0 => Ok(None),
+        _ => Ok(Some(byte[0])),
+    }
 }

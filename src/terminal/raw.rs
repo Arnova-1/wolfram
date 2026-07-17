@@ -1,18 +1,17 @@
-use crate::termios::bits::{ Termios, ECHO, OPOST, STDIN_FILENO, TCSAFLUSH, ICANON, ISIG, IXON, IEXTEN, ICRNL, BRKINT, INPCK, ISTRIP, CS8, VTIME, VMIN };
-use crate::termios::ffi::tcsetattr;
+use crate::include::termios::bits::*;
+use crate::include::termios::ffi::tcsetattr;
 
 use std::io::{ Result, Error };
 
-#[derive(Debug)]
 pub struct RawMode {
     pub original: Termios,
 }
 
 impl Drop for RawMode {
     fn drop(&mut self) {
-       unsafe { 
-           tcsetattr(STDIN_FILENO, TCSAFLUSH, &mut self.original);
-       };
+        unsafe {
+            tcsetattr(STDIN_FILENO, TCSAFLUSH, &mut self.original);
+        }
     }
 }
 
@@ -38,14 +37,14 @@ impl RawMode {
     }
 
     fn apply(term: &mut Termios) -> Result<()> {
-       let ret = unsafe {
-           tcsetattr(STDIN_FILENO, TCSAFLUSH, term)
-       };
-
-       if ret == -1 {
-           Err(Error::last_os_error())
-       } else {
-           Ok(())
-       }
-    } 
+        let ret = unsafe {
+            tcsetattr(STDIN_FILENO, TCSAFLUSH, term)
+        };
+    
+        if ret == -1 {
+            Err(Error::last_os_error())
+        } else {
+            Ok(())
+        }
+    }  
 }

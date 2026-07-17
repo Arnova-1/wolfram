@@ -1,4 +1,4 @@
-use crate::termios::bits::Termios;
+use super::bits::Termios;
 
 unsafe extern "C" {
     pub fn tcgetattr(fd: i32, termios_p: *mut Termios) -> i32;
